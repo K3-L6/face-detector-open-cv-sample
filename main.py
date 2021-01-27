@@ -2,13 +2,22 @@ import cv2
 
 trained_face_data = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-colored_img = cv2.imread('RDJ-JD.jpg')
+webcam = cv2.VideoCapture('memes.mp4')
 
-grayscaled_img = cv2.cvtColor(colored_img, cv2.COLOR_BGR2GRAY)
-face_coordinates = trained_face_data.detectMultiScale(grayscaled_img)
+while True:
 
-for (x, y, w, h) in face_coordinates:
-    cv2.rectangle(colored_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    is_frame_read, frame = webcam.read()
 
-cv2.imshow('Face Detection AI', colored_img)
-cv2.waitKey()
+    grayscaled_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    face_coordinates = trained_face_data.detectMultiScale(grayscaled_frame)
+
+    for (x, y, w, h) in face_coordinates:
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    cv2.imshow('Face Detection AI', frame)
+    key = cv2.waitKey(1)
+
+    if key == 113 or key == 81:
+        break
+
+webcam.release()
